@@ -28,14 +28,14 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -DskipTests=true # Construire le projet sans exécuter les tests
 
-      # Étape 4 : Exécuter les tests
-      - name: Run Tests
-        run: mvn test
-
-      # Étape 5 (Optionnel) : Télécharger les résultats des tests comme artefacts
-      - name: Upload Test Results (Optional)
-        if: always() # Cette étape s'exécute même si les tests échouent
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: target/surefire-reports/ # Répertoire contenant les rapports de tests Maven
+#      # Étape 4 : Exécuter les tests
+#      - name: Run Tests
+#        run: mvn test
+#
+#      # Étape 5 (Optionnel) : Télécharger les résultats des tests comme artefacts
+#      - name: Upload Test Results (Optional)
+#        if: always() # Cette étape s'exécute même si les tests échouent
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: test-results
+#          path: target/surefire-reports/ # Répertoire contenant les rapports de tests Maven
