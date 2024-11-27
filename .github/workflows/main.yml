@@ -1,35 +1,53 @@
-# name: Run Tests
+name: Run Tests
 
-# on:
-#   pull_request:
-#     branches:
-#       - main # Target branch for the tests
-#   push:
-#     branches:
-#       - main
+on:
+  pull_request:
+    branches:
+      - main  # Target branch for the tests
+  push:
+    branches:
+      - main  # Run on push to main branch
 
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
+    steps:
+      # Step 1: Checkout the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-#       - name: Setup Node.js (example for a JS project)
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '16'
+      # Step 2: Set up JDK (Java Development Kit) - Required for Spring Boot
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'  # You can change this to your required Java version, like '8', '17', etc.
 
-#       - name: Install dependencies
-#         run: npm install
+      # Step 3: Cache Maven dependencies to speed up subsequent builds
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository  # Path to the Maven local repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
-#       - name: Run Tests
-#         run: npm test
+      # Step 4: Install dependencies and run tests
+      - name: Run Maven Build and Tests
+        run: mvn clean install -DskipTests=false  # Runs tests and installs dependencies
 
-#       - name: Upload Test Results (Optional)
-#         if: always()
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: test-results
-#           path: ./test-results
+      # Step 5: Upload Test Results (Optional)
+      - name: Upload Test Results
+        if: always()  # This ensures the results are uploaded even if the tests fail
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: target/test-classes  # Path to the test results (for Maven, it's typically under target/test-classes)
+
+      # Optional: If you want to upload the JAR file after the build, you can add another upload artifact step
+      - name: Upload JAR file (Optional)
+        if: success()  # This ensures the artifact is uploaded only if the build succeeds
+        uses: actions/upload-artifact@v3
+        with:
+          name: spring-boot-artifact
+          path: target/*.jar  # Path to the packaged JAR file
