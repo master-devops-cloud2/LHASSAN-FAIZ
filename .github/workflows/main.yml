@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v3
 
       # Step 2: Set up JDK (Java Development Kit) - Required for Spring Boot
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
           java-version: '11'  # You can change this to your required Java version, like '8', '17', etc.
