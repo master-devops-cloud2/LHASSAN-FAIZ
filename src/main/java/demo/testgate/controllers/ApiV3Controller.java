@@ -10,6 +10,7 @@ public class ApiV3Controller {
 
     @GetMapping("/hello")
     public String helloV1() {
+        System.out.println("Hello World");
         return "Hello from API version 3!";
     }
 }
