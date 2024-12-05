@@ -28,6 +28,14 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -DskipTests=true # Construire le projet sans exécuter les tests
 
+      # Étape 4 : Analyser le code avec SonarCloud
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v2
+        with:
+          projectKey: LHASSAN-FAIZ
+          organization: master-devops-cloud2 \
+          token: ${{ secrets.SONAR_TOKEN }}
+
 #      # Étape 4 : Exécuter les tests
 #      - name: Run Tests
 #        run: mvn test
